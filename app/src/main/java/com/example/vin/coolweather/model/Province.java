@@ -3,7 +3,7 @@ package com.example.vin.coolweather.model;
 /**
  * Created by vin on 16/6/22.
  */
-public class Provice {
+public class Province {
     private int id;
     private String provinceName;
     private String provinceCode;
