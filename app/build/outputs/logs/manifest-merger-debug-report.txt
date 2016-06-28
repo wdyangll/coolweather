@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:2:1-19:12
+ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:2:1-20:12
 	xmlns:android
 		ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:2:11-69
 	package
@@ -18,7 +18,7 @@ ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidMani
 	android:name
 		ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:4:22-64
 application
-ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:5:5-17:19
+ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:5:5-18:19
 MERGED from [com.android.support:appcompat-v7:22.2.1] /Users/vin/AndroidStudioProjects/CoolWeather/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:22.2.1] /Users/vin/AndroidStudioProjects/CoolWeather/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/AndroidManifest.xml:22:5-20
 	android:supportsRtl
@@ -45,6 +45,10 @@ category#android.intent.category.LAUNCHER
 ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:14:17-76
 	android:name
 		ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:14:27-74
+activity#com.example.vin.coolweather.activity.WeatherActivity
+ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:17:9-61
+	android:name
+		ADDED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml:17:19-59
 uses-sdk
 INJECTED from /Users/vin/AndroidStudioProjects/CoolWeather/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:22.2.1] /Users/vin/AndroidStudioProjects/CoolWeather/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/AndroidManifest.xml:20:5-43
