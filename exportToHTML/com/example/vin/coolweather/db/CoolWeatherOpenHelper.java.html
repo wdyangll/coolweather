@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>CoolWeatherOpenHelper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(106,135,89); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+CoolWeatherOpenHelper.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.vin.coolweather.db</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Context</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s2">/** 
+ * Created by vin on 16/6/22. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">CoolWeatherOpenHelper </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper { 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String CREATE_PROVINCE = </span><span class="s3">&quot;create table Province(&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;id integer primary key autoincrement,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;province_name text,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;province_code text)&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String CREATE_CITY = </span><span class="s3">&quot;create table City(&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;id integer primary key autoincrement,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;city_name text,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;city_code text,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;province_id integer)&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String CREATE_COUNTY = </span><span class="s3">&quot;create table County(&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;id integer primary key autoincrement,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;county_name text,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;county_code text,&quot;</span><span class="s1"> 
+            + </span><span class="s3">&quot;city_id integer)&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+ 
+ 
+    </span><span class="s0">public </span><span class="s1">CoolWeatherOpenHelper(Context context</span><span class="s0">, </span><span class="s1">String name</span><span class="s0">, </span><span class="s1">SQLiteDatabase.CursorFactory factory</span><span class="s0">, int </span><span class="s1">version) { 
+        </span><span class="s0">super</span><span class="s1">(context</span><span class="s0">, </span><span class="s1">name</span><span class="s0">, </span><span class="s1">factory</span><span class="s0">, </span><span class="s1">version)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) { 
+        db.execSQL(CREATE_PROVINCE)</span><span class="s0">;</span><span class="s1"> 
+        db.execSQL(CREATE_CITY)</span><span class="s0">;</span><span class="s1"> 
+        db.execSQL(CREATE_COUNTY)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db</span><span class="s0">, int </span><span class="s1">oldVersion</span><span class="s0">, int </span><span class="s1">newVersion) { 
+ 
+    } 
+} 
+ 
+</span></pre>
+</body>
+</html>

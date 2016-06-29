@@ -1,0 +1,149 @@
+<html>
+<head>
+<title>CoolWeatherDB.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(106,135,89); }
+.s4 { color: rgb(104,151,187); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+CoolWeatherDB.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.vin.coolweather.db</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.ContentValues</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.content.Context</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.*</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.City</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.County</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.Province</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.List</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s2">/** 
+ * Created by vin on 16/6/26. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">CoolWeatherDB { 
+    </span><span class="s0">public static final </span><span class="s1">String DB_NAMWE = </span><span class="s3">&quot;cool_weather&quot;</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">public static final int </span><span class="s1">VERSION = </span><span class="s4">1</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">private static </span><span class="s1">CoolWeatherDB coolWeatherDB</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">private </span><span class="s1">SQLiteDatabase db</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">private </span><span class="s1">CoolWeatherDB(Context context) { 
+        CoolWeatherOpenHelper dbHelper = </span><span class="s0">new </span><span class="s1">CoolWeatherOpenHelper(context</span><span class="s0">, </span><span class="s1">DB_NAMWE</span><span class="s0">, null, </span><span class="s1">VERSION)</span><span class="s0">;</span><span class="s1"> 
+        db = dbHelper.getWritableDatabase()</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public synchronized static </span><span class="s1">CoolWeatherDB getInstance(Context context) { 
+        </span><span class="s0">if </span><span class="s1">(coolWeatherDB == </span><span class="s0">null</span><span class="s1">) { 
+            coolWeatherDB = </span><span class="s0">new </span><span class="s1">CoolWeatherDB(context)</span><span class="s0">;</span><span class="s1"> 
+ 
+        } 
+        </span><span class="s0">return </span><span class="s1">coolWeatherDB</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">saveProvince(Province province) { 
+        </span><span class="s0">if </span><span class="s1">(province != </span><span class="s0">null</span><span class="s1">) { 
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues()</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;province_name&quot;</span><span class="s0">, </span><span class="s1">province.getProvinceName())</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;province_code&quot;</span><span class="s0">, </span><span class="s1">province.getProvinceCode())</span><span class="s0">;</span><span class="s1"> 
+            db.insert(</span><span class="s3">&quot;Province&quot;</span><span class="s0">, null, </span><span class="s1">values)</span><span class="s0">;</span><span class="s1"> 
+        } 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">List&lt;Province&gt; loadProvince() { 
+        List&lt;Province&gt; list = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span><span class="s1"> 
+        Cursor cursor = db.query(</span><span class="s3">&quot;Province&quot;</span><span class="s0">, null, null, null, null, null, null</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()) { 
+            </span><span class="s0">do </span><span class="s1">{ 
+                Province province = </span><span class="s0">new </span><span class="s1">Province()</span><span class="s0">;</span><span class="s1"> 
+                province.setId(cursor.getInt(cursor.getColumnIndex(</span><span class="s3">&quot;id&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                province.setProvinceName(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;province_name&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                province.setProvinceCode(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;province_code&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                list.add(province)</span><span class="s0">;</span><span class="s1"> 
+            } </span><span class="s0">while </span><span class="s1">(cursor.moveToNext())</span><span class="s0">;</span><span class="s1"> 
+        } 
+        </span><span class="s0">if </span><span class="s1">(cursor != </span><span class="s0">null</span><span class="s1">) { 
+            cursor.close()</span><span class="s0">;</span><span class="s1"> 
+        } 
+        </span><span class="s0">return </span><span class="s1">list</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">savaCity(City city) { 
+        </span><span class="s0">if </span><span class="s1">(city != </span><span class="s0">null</span><span class="s1">) { 
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues()</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;city_name&quot;</span><span class="s0">, </span><span class="s1">city.getCityName())</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;city_code&quot;</span><span class="s0">, </span><span class="s1">city.getCityCode())</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;province_id&quot;</span><span class="s0">, </span><span class="s1">city.getProvinceId())</span><span class="s0">;</span><span class="s1"> 
+            db.insert(</span><span class="s3">&quot;City&quot;</span><span class="s0">, null, </span><span class="s1">values)</span><span class="s0">;</span><span class="s1"> 
+        } 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">List&lt;City&gt; loadCities(</span><span class="s0">int </span><span class="s1">provinceId) { 
+        List&lt;City&gt; list = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span><span class="s1"> 
+        Cursor cursor = db.query(</span><span class="s3">&quot;City&quot;</span><span class="s0">, null, </span><span class="s3">&quot;province_id = ?&quot;</span><span class="s0">, new </span><span class="s1">String[]{String.valueOf(provinceId)}</span><span class="s0">, null, null, null</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()) { 
+            </span><span class="s0">do </span><span class="s1">{ 
+                City city = </span><span class="s0">new </span><span class="s1">City()</span><span class="s0">;</span><span class="s1"> 
+                city.setId(cursor.getInt(cursor.getColumnIndex(</span><span class="s3">&quot;id&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                city.setCityName(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;city_name&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                city.setCityCode(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;city_code&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                city.setProvinceId(cursor.getInt(cursor.getColumnIndex(</span><span class="s3">&quot;province_id&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                list.add(city)</span><span class="s0">;</span><span class="s1"> 
+            } </span><span class="s0">while </span><span class="s1">(cursor.moveToNext())</span><span class="s0">;</span><span class="s1"> 
+ 
+        } 
+        </span><span class="s0">if </span><span class="s1">(cursor != </span><span class="s0">null</span><span class="s1">) { 
+            cursor.close()</span><span class="s0">;</span><span class="s1"> 
+        } 
+        </span><span class="s0">return </span><span class="s1">list</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">saveCounty(County county) { 
+        </span><span class="s0">if </span><span class="s1">(county != </span><span class="s0">null</span><span class="s1">) { 
+            ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues()</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;county_name&quot;</span><span class="s0">, </span><span class="s1">county.getCountyName())</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;county_code&quot;</span><span class="s0">, </span><span class="s1">county.getCountyCode())</span><span class="s0">;</span><span class="s1"> 
+            values.put(</span><span class="s3">&quot;city_id&quot;</span><span class="s0">, </span><span class="s1">county.getCityId())</span><span class="s0">;</span><span class="s1"> 
+            db.insert(</span><span class="s3">&quot;County&quot;</span><span class="s0">, null, </span><span class="s1">values)</span><span class="s0">;</span><span class="s1"> 
+        } 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">List&lt;County&gt; loadCounties(</span><span class="s0">int </span><span class="s1">cityId) { 
+        List&lt;County&gt; list = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span><span class="s1"> 
+        Cursor cursor = db.query(</span><span class="s3">&quot;County&quot;</span><span class="s0">, null, </span><span class="s3">&quot;city_id = ?&quot;</span><span class="s0">, new </span><span class="s1">String[]{String.valueOf(cityId)}</span><span class="s0">, null, null, null</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()) { 
+            </span><span class="s0">do </span><span class="s1">{ 
+                County county = </span><span class="s0">new </span><span class="s1">County()</span><span class="s0">;</span><span class="s1"> 
+                county.setId(cursor.getInt(cursor.getColumnIndex(</span><span class="s3">&quot;id&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                county.setCountyCode(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;county_code&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                county.setCountyName(cursor.getString(cursor.getColumnIndex(</span><span class="s3">&quot;county_name&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                county.setCityId(cursor.getInt(cursor.getColumnIndex(</span><span class="s3">&quot;city_id&quot;</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+                list.add(county)</span><span class="s0">;</span><span class="s1"> 
+            } </span><span class="s0">while </span><span class="s1">(cursor.moveToNext())</span><span class="s0">;</span><span class="s1"> 
+        } 
+        </span><span class="s0">if </span><span class="s1">(cursor != </span><span class="s0">null</span><span class="s1">) { 
+            cursor.close()</span><span class="s0">;</span><span class="s1"> 
+        } 
+        </span><span class="s0">return </span><span class="s1">list</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

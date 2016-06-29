@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>HttpUtil.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(106,135,89); }
+.s4 { color: rgb(104,151,187); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+HttpUtil.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.vin.coolweather.util</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">java.io.BufferedReader</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.IOException</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.InputStream</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.InputStreamReader</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.StringReader</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.net.HttpURLConnection</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.net.MalformedURLException</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.net.URL</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s2">/** 
+ * Created by vin on 16/6/26. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">HttpUtil { 
+ 
+    </span><span class="s0">public static void </span><span class="s1">sendHttpRequest(</span><span class="s0">final </span><span class="s1">String address</span><span class="s0">, final </span><span class="s1">HttpCallbackListener listener) { 
+        </span><span class="s0">new </span><span class="s1">Thread(</span><span class="s0">new </span><span class="s1">Runnable() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">run() { 
+                HttpURLConnection connection = </span><span class="s0">null;</span><span class="s1"> 
+                </span><span class="s0">try </span><span class="s1">{ 
+                    URL url = </span><span class="s0">new </span><span class="s1">URL(address)</span><span class="s0">;</span><span class="s1"> 
+                    connection = (HttpURLConnection) url.openConnection()</span><span class="s0">;</span><span class="s1"> 
+                    connection.setRequestMethod(</span><span class="s3">&quot;GET&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    connection.setConnectTimeout(</span><span class="s4">8000</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    connection.setReadTimeout(</span><span class="s4">8000</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    InputStream in = connection.getInputStream()</span><span class="s0">;</span><span class="s1"> 
+                    BufferedReader reader = </span><span class="s0">new </span><span class="s1">BufferedReader(</span><span class="s0">new </span><span class="s1">InputStreamReader(in))</span><span class="s0">;</span><span class="s1"> 
+                    StringBuilder response = </span><span class="s0">new </span><span class="s1">StringBuilder()</span><span class="s0">;</span><span class="s1"> 
+                    String line</span><span class="s0">;</span><span class="s1"> 
+                    </span><span class="s0">while </span><span class="s1">((line = reader.readLine()) != </span><span class="s0">null</span><span class="s1">) { 
+                        response.append(line)</span><span class="s0">;</span><span class="s1"> 
+                    } 
+                    </span><span class="s0">if </span><span class="s1">(listener != </span><span class="s0">null</span><span class="s1">) { 
+                        listener.onFinish(response.toString())</span><span class="s0">;</span><span class="s1"> 
+                    } 
+                } </span><span class="s0">catch </span><span class="s1">(Exception e) { 
+                    e.printStackTrace()</span><span class="s0">;</span><span class="s1"> 
+                    </span><span class="s0">if </span><span class="s1">(listener != </span><span class="s0">null</span><span class="s1">) { 
+                        listener.onError(e)</span><span class="s0">;</span><span class="s1"> 
+                    } 
+                }</span><span class="s0">finally </span><span class="s1">{ 
+                    </span><span class="s0">if </span><span class="s1">(connection != </span><span class="s0">null</span><span class="s1">) { 
+                        connection.disconnect()</span><span class="s0">;</span><span class="s1"> 
+                    } 
+                } 
+            } 
+        }).start()</span><span class="s0">;</span><span class="s1"> 
+    } 
+} 
+</span></pre>
+</body>
+</html>

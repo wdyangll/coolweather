@@ -52,12 +52,15 @@ public class ChooseAreaActivity extends Activity {
     private City mSelectedCity;
     private int mCurrentLevel;
 
+    private boolean isFromWeatherActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("city_selected",false)){
-            Intent intent = new Intent(this,WeatherActivity.class);
+        if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity) {
+            Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
             finish();
         }
@@ -77,10 +80,10 @@ public class ChooseAreaActivity extends Activity {
                 } else if (mCurrentLevel == LEVEL_CITY) {
                     mSelectedCity = mCityList.get(position);
                     queryCounties();
-                }else if (mCurrentLevel == LEVEL_COUNTY){
+                } else if (mCurrentLevel == LEVEL_COUNTY) {
                     String countyCode = mCountyList.get(position).getCountyCode();
-                    Intent intent = new Intent(ChooseAreaActivity.this,WeatherActivity.class);
-                    intent.putExtra("county_code",countyCode);
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    intent.putExtra("county_code", countyCode);
                     startActivity(intent);
                     finish();
                 }
@@ -145,8 +148,8 @@ public class ChooseAreaActivity extends Activity {
             address = "http://www.weather.com.cn/data/list3/city" + code + ".xml？level=2";
         } else if ("county".equals(type)) {
             address = "http://www.weather.com.cn/data/list3/city" + code + ".xml？level=3";
-    }
-    showProgressDialog();
+        }
+        showProgressDialog();
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
@@ -212,6 +215,10 @@ public class ChooseAreaActivity extends Activity {
         } else if (mCurrentLevel == LEVEL_COUNTY) {
             queryCities();
         } else {
+            if (isFromWeatherActivity) {
+                Intent intent = new Intent(this, WeatherActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

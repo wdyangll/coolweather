@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>Utility.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(106,135,89); }
+.s4 { color: rgb(104,151,187); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Utility.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.vin.coolweather.util</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Context</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.content.SharedPreferences</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.preference.PreferenceManager</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.text.TextUtils</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.util.Log</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.db.CoolWeatherDB</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.City</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.County</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">com.example.vin.coolweather.model.Province</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">org.json.JSONException</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">org.json.JSONObject</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">java.text.SimpleDateFormat</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.Date</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.Locale</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s2">/** 
+ * Created by vin on 16/6/26. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">Utility { 
+    </span><span class="s0">public static void </span><span class="s1">handleWeatherResponse(Context context</span><span class="s0">, </span><span class="s1">String response) { 
+        </span><span class="s0">try </span><span class="s1">{ 
+            JSONObject jsonObject = </span><span class="s0">new </span><span class="s1">JSONObject(response)</span><span class="s0">;</span><span class="s1"> 
+            JSONObject wetherInfo = jsonObject.getJSONObject(</span><span class="s3">&quot;weatherinfo&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String cityName = wetherInfo.getString(</span><span class="s3">&quot;city&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String weatherCode = wetherInfo.getString(</span><span class="s3">&quot;cityid&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String temp1 = wetherInfo.getString(</span><span class="s3">&quot;temp1&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String temp2 = wetherInfo.getString(</span><span class="s3">&quot;temp2&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String weatherDesp = wetherInfo.getString(</span><span class="s3">&quot;weather&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            String publishTime = wetherInfo.getString(</span><span class="s3">&quot;ptime&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            saveWeatherInfo(context</span><span class="s0">, </span><span class="s1">cityName</span><span class="s0">, </span><span class="s1">weatherCode</span><span class="s0">, </span><span class="s1">temp1</span><span class="s0">, </span><span class="s1">temp2</span><span class="s0">, </span><span class="s1">weatherDesp</span><span class="s0">, </span><span class="s1">publishTime)</span><span class="s0">;</span><span class="s1"> 
+        } </span><span class="s0">catch </span><span class="s1">(Exception e) { 
+            e.printStackTrace()</span><span class="s0">;</span><span class="s1"> 
+        } 
+ 
+    } 
+ 
+    </span><span class="s0">public static void </span><span class="s1">saveWeatherInfo(Context context</span><span class="s0">, </span><span class="s1">String cityName</span><span class="s0">, </span><span class="s1">String weatherCode</span><span class="s0">, </span><span class="s1">String temp1</span><span class="s0">,</span><span class="s1"> 
+                                       String temp2</span><span class="s0">, </span><span class="s1">String weatherDesp</span><span class="s0">, </span><span class="s1">String publishTime) { 
+        SimpleDateFormat sdf = </span><span class="s0">new </span><span class="s1">SimpleDateFormat(</span><span class="s3">&quot;yyyy年M月d日&quot;</span><span class="s0">, </span><span class="s1">Locale.CHINA)</span><span class="s0">;</span><span class="s1"> 
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit()</span><span class="s0">;</span><span class="s1"> 
+        editor.putBoolean(</span><span class="s3">&quot;city_selected&quot;</span><span class="s0">,true</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;city_name&quot;</span><span class="s0">,</span><span class="s1">cityName)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;weather_code&quot;</span><span class="s0">,</span><span class="s1">weatherCode)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;temp1&quot;</span><span class="s0">,</span><span class="s1">temp1)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;temp2&quot;</span><span class="s0">,</span><span class="s1">temp2)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;weather_desp&quot;</span><span class="s0">,</span><span class="s1">weatherDesp)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;publish_time&quot;</span><span class="s0">,</span><span class="s1">publishTime)</span><span class="s0">;</span><span class="s1"> 
+        editor.putString(</span><span class="s3">&quot;current_date&quot;</span><span class="s0">,</span><span class="s1">sdf.format(</span><span class="s0">new </span><span class="s1">Date()))</span><span class="s0">;</span><span class="s1"> 
+        editor.commit()</span><span class="s0">;</span><span class="s1"> 
+ 
+    } 
+ 
+    </span><span class="s0">public synchronized static boolean </span><span class="s1">handleProvincesResponse(CoolWeatherDB coolWeatherDB</span><span class="s0">, </span><span class="s1">String response) { 
+        </span><span class="s0">if </span><span class="s1">(!TextUtils.isEmpty(response)) { 
+            Log.i(</span><span class="s3">&quot;TAG&quot;</span><span class="s0">, </span><span class="s1">response)</span><span class="s0">;</span><span class="s1"> 
+            String[] allProvince = response.split(</span><span class="s3">&quot;,&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(allProvince != </span><span class="s0">null </span><span class="s1">&amp;&amp; allProvince.length &gt; </span><span class="s4">0</span><span class="s1">) { 
+                </span><span class="s0">for </span><span class="s1">(String p : allProvince) { 
+                    String[] array = p.split(</span><span class="s3">&quot;</span><span class="s0">\\</span><span class="s3">|&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    Province province = </span><span class="s0">new </span><span class="s1">Province()</span><span class="s0">;</span><span class="s1"> 
+                    province.setProvinceCode(array[</span><span class="s4">0</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    province.setProvinceName(array[</span><span class="s4">1</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    coolWeatherDB.saveProvince(province)</span><span class="s0">;</span><span class="s1"> 
+                } 
+                </span><span class="s0">return true;</span><span class="s1"> 
+            } 
+        } 
+        </span><span class="s0">return false;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public synchronized static boolean </span><span class="s1">handleCitiesResponse(CoolWeatherDB coolWeatherDB</span><span class="s0">, </span><span class="s1">String response</span><span class="s0">, int </span><span class="s1">provinceId) { 
+        </span><span class="s0">if </span><span class="s1">(!TextUtils.isEmpty(response)) { 
+            String[] allCities = response.split(</span><span class="s3">&quot;,&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(allCities != </span><span class="s0">null </span><span class="s1">&amp;&amp; allCities.length &gt; </span><span class="s4">0</span><span class="s1">) { 
+                </span><span class="s0">for </span><span class="s1">(String c : allCities) { 
+                    String[] array = c.split(</span><span class="s3">&quot;</span><span class="s0">\\</span><span class="s3">|&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    City city = </span><span class="s0">new </span><span class="s1">City()</span><span class="s0">;</span><span class="s1"> 
+                    city.setProvinceId(provinceId)</span><span class="s0">;</span><span class="s1"> 
+                    city.setCityCode(array[</span><span class="s4">0</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    city.setCityName(array[</span><span class="s4">1</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    coolWeatherDB.savaCity(city)</span><span class="s0">;</span><span class="s1"> 
+                } 
+                </span><span class="s0">return true;</span><span class="s1"> 
+            } 
+        } 
+        </span><span class="s0">return false;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public static boolean </span><span class="s1">handleCountiesResponse(CoolWeatherDB coolWeatherDB</span><span class="s0">, </span><span class="s1">String response</span><span class="s0">, int </span><span class="s1">cityId) { 
+        </span><span class="s0">if </span><span class="s1">(!TextUtils.isEmpty(response)) { 
+            String[] allCounties = response.split(</span><span class="s3">&quot;,&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">if </span><span class="s1">(allCounties != </span><span class="s0">null </span><span class="s1">&amp;&amp; allCounties.length &gt; </span><span class="s4">0</span><span class="s1">) { 
+                </span><span class="s0">for </span><span class="s1">(String c : allCounties) { 
+                    String[] array = c.split(</span><span class="s3">&quot;</span><span class="s0">\\</span><span class="s3">|&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    County county = </span><span class="s0">new </span><span class="s1">County()</span><span class="s0">;</span><span class="s1"> 
+                    county.setCountyCode(array[</span><span class="s4">0</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    county.setCountyName(array[</span><span class="s4">1</span><span class="s1">])</span><span class="s0">;</span><span class="s1"> 
+                    county.setCityId(cityId)</span><span class="s0">;</span><span class="s1"> 
+                    coolWeatherDB.saveCounty(county)</span><span class="s0">;</span><span class="s1"> 
+                } 
+                </span><span class="s0">return true;</span><span class="s1"> 
+            } 
+        } 
+        </span><span class="s0">return false;</span><span class="s1"> 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>
